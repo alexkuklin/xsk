@@ -10,7 +10,7 @@
 
     <name>XSK - Coverage Aggregate</name>
     <artifactId>xsk-coverage-aggregate</artifactId>
-    <version>0.17.1-SNAPSHOT</version>
+    <version>0.17.1</version>
     <description>Aggregate Coverage Report</description>
 
     <dependencies>

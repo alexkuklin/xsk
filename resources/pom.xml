@@ -10,7 +10,7 @@
 
 	<name>XSK - Resources - Parent</name>
 	<artifactId>xsk-resources-parent</artifactId>
-	<version>0.17.1-SNAPSHOT</version>
+	<version>0.17.1</version>
 	<packaging>pom</packaging>
 
 	<modules>
