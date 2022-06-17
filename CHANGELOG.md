@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.18.0](https://github.com/alexkuklin/xsk/compare/v0.17.1...v0.18.0) (2022-06-17)
+
+
+### Features
+
+* more lorem ([657947b](https://github.com/alexkuklin/xsk/commit/657947b7c233e3f1c75e7c7dc030de1c3712312c))
+
 ## [0.17.1](https://github.com/alexkuklin/xsk/compare/v0.17.0...v0.17.1) (2022-06-16)
 
 

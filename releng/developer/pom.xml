@@ -11,7 +11,7 @@
 
 	<name>XSK - Releng - Developer</name>
 	<artifactId>xsk-releng-developer</artifactId>
-	<version>0.17.2-SNAPSHOT</version>
+	<version>0.18.0</version>
 	<packaging>war</packaging>
 
 	<build>

@@ -11,7 +11,7 @@
 
     <name>XSK - Integration Tests - Engines - HDB</name>
     <artifactId>xsk-integration-tests-engines-hdb</artifactId>
-    <version>0.17.2-SNAPSHOT</version>
+    <version>0.18.0</version>
     <packaging>jar</packaging>
 
     <dependencies>

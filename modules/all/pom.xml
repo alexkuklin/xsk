@@ -9,7 +9,7 @@
 
 	<name>XSK - Modules - All</name>
 	<artifactId>xsk-modules-all</artifactId>
-	<version>0.17.2-SNAPSHOT</version>
+	<version>0.18.0</version>
 	<packaging>jar</packaging>
 
 	<dependencies>

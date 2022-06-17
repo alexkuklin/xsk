@@ -10,7 +10,7 @@
 
     <name>XSK - Modules - IDE - Parent</name>
     <artifactId>xsk-modules-ide-parent</artifactId>
-    <version>0.17.2-SNAPSHOT</version>
+    <version>0.18.0</version>
     <packaging>pom</packaging>
 
     <modules>
