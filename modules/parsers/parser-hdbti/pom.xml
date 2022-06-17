@@ -11,7 +11,7 @@
 
     <name>XSK - Modules - Parsers - HDB Table Import</name>
     <artifactId>xsk-modules-parsers-hdbti</artifactId>
-    <version>0.18.1-SNAPSHOT</version>
+    <version>0.18.1</version>
     <packaging>jar</packaging>
 
     <properties>
