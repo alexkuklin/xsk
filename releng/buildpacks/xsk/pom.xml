@@ -11,7 +11,7 @@
 
   <name>XSK - Releng - Buildpacks - XSK</name>
   <artifactId>xsk-releng-buildpacks-xsk</artifactId>
-  <version>0.18.1</version>
+  <version>0.18.2-SNAPSHOT</version>
 
   <build>
     <finalName>${project.artifactId}</finalName>

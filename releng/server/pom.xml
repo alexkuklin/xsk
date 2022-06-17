@@ -11,7 +11,7 @@
 
 	<name>XSK - Releng - Server</name>
 	<artifactId>xsk-releng-server</artifactId>
-	<version>0.18.1</version>
+	<version>0.18.2-SNAPSHOT</version>
 	<packaging>war</packaging>
 
 	<build>
