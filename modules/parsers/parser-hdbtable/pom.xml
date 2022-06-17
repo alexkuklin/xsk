@@ -10,7 +10,7 @@
 
     <name>XSK - Modules - Parsers - HDB Table</name>
     <artifactId>xsk-modules-parsers-hdbtable</artifactId>
-    <version>0.17.2-SNAPSHOT</version>
+    <version>0.18.0</version>
     <packaging>jar</packaging>
 
     <properties>

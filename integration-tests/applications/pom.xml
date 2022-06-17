@@ -10,7 +10,7 @@
 
   <name>XSK - Integration Tests - Applications</name>
   <artifactId>xsk-integration-tests-applications</artifactId>
-  <version>0.17.2-SNAPSHOT</version>
+  <version>0.18.0</version>
   <packaging>jar</packaging>
 
   <dependencies>

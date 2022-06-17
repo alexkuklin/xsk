@@ -10,7 +10,7 @@
 
 	<name>XSK - Resources - All</name>
 	<artifactId>xsk-resources-all</artifactId>
-	<version>0.17.2-SNAPSHOT</version>
+	<version>0.18.0</version>
 	<packaging>jar</packaging>
 
 	<dependencies>

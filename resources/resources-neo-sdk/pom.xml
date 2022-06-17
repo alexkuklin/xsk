@@ -11,7 +11,7 @@
 
   <name>XSK - Resources - Neo SDK</name>
   <artifactId>xsk-resources-neo-sdk</artifactId>
-  <version>0.17.2-SNAPSHOT</version>
+  <version>0.18.0</version>
   <packaging>jar</packaging>
 
   <build>

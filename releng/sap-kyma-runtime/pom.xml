@@ -10,7 +10,7 @@
 
 	<name>XSK - Releng - Kyma</name>
 	<artifactId>xsk-releng-kyma-runtime</artifactId>
-	<version>0.17.2-SNAPSHOT</version>
+	<version>0.18.0</version>
 	<packaging>war</packaging>
 
 	<build>
