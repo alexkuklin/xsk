@@ -11,7 +11,7 @@
 
 	<name>XSK - Resources - Neo SDK - Synchronizer</name>
 	<artifactId>xsk-resources-neo-sdk-synchronizer</artifactId>
-	<version>0.18.0</version>
+	<version>0.18.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<dependencies>
