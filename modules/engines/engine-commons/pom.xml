@@ -11,7 +11,7 @@
 
     <name>XSK - Modules - Engines - Commons</name>
     <artifactId>xsk-modules-engines-commons</artifactId>
-    <version>0.18.0</version>
+    <version>0.18.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <dependencies>
