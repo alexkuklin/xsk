@@ -10,7 +10,7 @@
 
 	<name>XSK - Modules - API - All</name>
 	<artifactId>xsk-modules-api-all</artifactId>
-	<version>0.17.1-SNAPSHOT</version>
+	<version>0.17.1</version>
 	<packaging>jar</packaging>
 
 	<dependencies>
