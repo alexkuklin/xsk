@@ -167,4 +167,9 @@
 		</dependency>
 	</dependencies>
 
+	<properties>
+		<license.header.location>../../licensing-header.txt</license.header.location>
+		<git-commit-id-plugin.version>4.9.10</git-commit-id-plugin.version>
+	</properties>
+
 </project>
