@@ -10,7 +10,7 @@
 
 	<name>XSK - Releng - Server - Parent</name>
 	<artifactId>xsk-releng-server-parent</artifactId>
-	<version>0.18.0-SNAPSHOT</version>
+	<version>0.17.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<modules>
