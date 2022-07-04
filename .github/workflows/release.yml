@@ -7,6 +7,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      DOCKER_IMAGE_PREFIX: ${{ secrets.DOCKER_IMAGE_PREFIX }}
     steps:
       - uses: actions/checkout@v2
         with:
