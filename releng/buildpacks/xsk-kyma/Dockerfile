@@ -10,7 +10,8 @@
 # SPDX-License-Identifier: Apache-2.0
 
 ARG XSK_VERSION=latest
-FROM dirigiblelabs/xsk-kyma:$XSK_VERSION as base
+ARG DOCKER_IMAGE_PREFIX=dirigiblelabs/
+FROM ${DOCKER_IMAGE_PREFIX}xsk-kyma:$XSK_VERSION as base
 
 ENV CNB_USER_ID=65532
 ENV CNB_GROUP_ID=65532

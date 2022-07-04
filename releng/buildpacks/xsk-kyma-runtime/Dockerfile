@@ -9,7 +9,9 @@
 # SPDX-FileCopyrightText: 2022 SAP SE or an SAP affiliate company and XSK contributors
 # SPDX-License-Identifier: Apache-2.0
 
-FROM dirigiblelabs/xsk-kyma-runtime as base
+ARG XSK_VERSION=latest
+ARG DOCKER_IMAGE_PREFIX=dirigiblelabs/
+FROM ${DOCKER_IMAGE_PREFIX}xsk-kyma-runtime:$XSK_VERSION as base
 
 ENV CNB_USER_ID=65532
 ENV CNB_GROUP_ID=65532
