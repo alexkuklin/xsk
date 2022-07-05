@@ -96,6 +96,7 @@ jobs:
       - uses: buildpacks/github-actions/setup-pack@v4.1.0
       - name: XSK Buildpack
         run: |
+          set -x
           cd releng/buildpacks/xsk/
           docker build --load -t ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-base-xsk . --target base
           docker push ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-base-xsk
