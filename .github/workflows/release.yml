@@ -8,8 +8,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      DOCKER_IMAGE_PREFIX: ${{ secrets.DOCKER_IMAGE_PREFIX == '' && secrets.DOCKER_IMAGE_PREFIX || 'dirigiblelabs/' }}
+      DOCKER_IMAGE_PREFIX_SECRET: ${{ secrets.DOCKER_IMAGE_PREFIX }}
     steps:
+      - name: set variables
+        run: |
+          DOCKER_IMAGE_PREFIX=${DOCKER_IMAGE_PREFIX_SECRET:-dirigiblelabs/}
+          echo DOCKER_IMAGE_PREFIX=$DOCKER_IMAGE_PREFIX >> $GITHUB_ENV
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
@@ -46,113 +50,113 @@ jobs:
           echo $DOCKER_IMAGE_PREFIX | base64
           cd releng/server/standalone
           cp -r "${JAVA_HOME}" jdk
-          docker build --load -t ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}xsk:${{ env.XSK_VERSION }} --build-arg JDK_TYPE=external-jdk --build-arg JDK_HOME=jdk .
-          docker push ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}xsk:${{ env.XSK_VERSION }}
+          docker build --load -t ${DOCKER_IMAGE_PREFIX}xsk:${{ env.XSK_VERSION }} --build-arg JDK_TYPE=external-jdk --build-arg JDK_HOME=jdk .
+          docker push ${DOCKER_IMAGE_PREFIX}xsk:${{ env.XSK_VERSION }}
           cd ../../../
       - name: Push XSK for SAP Cloud Foundry
         run: |
           cd releng/server/sap-cf
           cp -r "${JAVA_HOME}" jdk
-          docker build --load -t ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}xsk-cf:${{ env.XSK_VERSION }} --build-arg JDK_TYPE=external-jdk --build-arg JDK_HOME=jdk .
-          docker push ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}xsk-cf:${{ env.XSK_VERSION }}
+          docker build --load -t ${DOCKER_IMAGE_PREFIX}xsk-cf:${{ env.XSK_VERSION }} --build-arg JDK_TYPE=external-jdk --build-arg JDK_HOME=jdk .
+          docker push ${DOCKER_IMAGE_PREFIX}xsk-cf:${{ env.XSK_VERSION }}
           cd ../../../
       - name: Push XSK for SAP Kyma
         run: |
           cd releng/server/sap-kyma
           cp -r "${JAVA_HOME}" jdk
-          docker build --load -t ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}xsk-kyma:${{ env.XSK_VERSION }} --build-arg JDK_TYPE=external-jdk --build-arg JDK_HOME=jdk .
-          docker push ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}xsk-kyma:${{ env.XSK_VERSION }}
+          docker build --load -t ${DOCKER_IMAGE_PREFIX}xsk-kyma:${{ env.XSK_VERSION }} --build-arg JDK_TYPE=external-jdk --build-arg JDK_HOME=jdk .
+          docker push ${DOCKER_IMAGE_PREFIX}xsk-kyma:${{ env.XSK_VERSION }}
           cd ../../../
       - name: Push XSK for SAP Kyma Runtime
         run: |
           cd releng/server/sap-kyma-runtime
-          docker build --load -t ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}xsk-kyma-runtime-base -f Dockerfile-base .
-          docker push ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}xsk-kyma-runtime-base
-          docker build --load -t ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}xsk-kyma-runtime .
-          docker push ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}xsk-kyma-runtime
-          docker build --load -t ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}xsk-kyma-runtime-distro -f Dockerfile-distro .
-          docker push ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}xsk-kyma-runtime-distro
+          docker build --load -t ${DOCKER_IMAGE_PREFIX}xsk-kyma-runtime-base -f Dockerfile-base .
+          docker push ${DOCKER_IMAGE_PREFIX}xsk-kyma-runtime-base
+          docker build --load -t ${DOCKER_IMAGE_PREFIX}xsk-kyma-runtime .
+          docker push ${DOCKER_IMAGE_PREFIX}xsk-kyma-runtime
+          docker build --load -t ${DOCKER_IMAGE_PREFIX}xsk-kyma-runtime-distro -f Dockerfile-distro .
+          docker push ${DOCKER_IMAGE_PREFIX}xsk-kyma-runtime-distro
           cd ../../../
       - uses: buildpacks/github-actions/setup-pack@v4.1.0
       - name: XSK Buildpack
         run: |
           set -x
           cd releng/buildpacks/xsk/
-          docker build --load --build-arg DOCKER_IMAGE_PREFIX=${DOCKER_IMAGE_PREFIX} --build-arg XSK_VERSION=${{ env.XSK_VERSION }} -t ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-base-xsk . --target base
-          docker tag ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-base-xsk ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-base-xsk:${{ env.XSK_VERSION }}
-          docker push ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-base-xsk:${{ env.XSK_VERSION }}
-          docker build --load --build-arg DOCKER_IMAGE_PREFIX=${DOCKER_IMAGE_PREFIX} --build-arg XSK_VERSION=${{ env.XSK_VERSION }} -t ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-run-xsk . --target run
-          docker tag ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-run-xsk ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-run-xsk:${{ env.XSK_VERSION }}
-          docker push ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-run-xsk:${{ env.XSK_VERSION }}
-          docker build --load --build-arg DOCKER_IMAGE_PREFIX=${DOCKER_IMAGE_PREFIX} --build-arg XSK_VERSION=${{ env.XSK_VERSION }} -t ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-build-xsk . --target build
-          docker tag ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-build-xsk ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-build-xsk:${{ env.XSK_VERSION }}
-          docker push ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-build-xsk:${{ env.XSK_VERSION }}
+          docker build --load --build-arg DOCKER_IMAGE_PREFIX=${DOCKER_IMAGE_PREFIX} --build-arg XSK_VERSION=${{ env.XSK_VERSION }} -t ${DOCKER_IMAGE_PREFIX}buildpacks-stack-base-xsk . --target base
+          docker tag ${DOCKER_IMAGE_PREFIX}buildpacks-stack-base-xsk ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-base-xsk:${{ env.XSK_VERSION }}
+          docker push ${DOCKER_IMAGE_PREFIX}buildpacks-stack-base-xsk:${{ env.XSK_VERSION }}
+          docker build --load --build-arg DOCKER_IMAGE_PREFIX=${DOCKER_IMAGE_PREFIX} --build-arg XSK_VERSION=${{ env.XSK_VERSION }} -t ${DOCKER_IMAGE_PREFIX}buildpacks-stack-run-xsk . --target run
+          docker tag ${DOCKER_IMAGE_PREFIX}buildpacks-stack-run-xsk ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-run-xsk:${{ env.XSK_VERSION }}
+          docker push ${DOCKER_IMAGE_PREFIX}buildpacks-stack-run-xsk:${{ env.XSK_VERSION }}
+          docker build --load --build-arg DOCKER_IMAGE_PREFIX=${DOCKER_IMAGE_PREFIX} --build-arg XSK_VERSION=${{ env.XSK_VERSION }} -t ${DOCKER_IMAGE_PREFIX}buildpacks-stack-build-xsk . --target build
+          docker tag ${DOCKER_IMAGE_PREFIX}buildpacks-stack-build-xsk ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-build-xsk:${{ env.XSK_VERSION }}
+          docker push ${DOCKER_IMAGE_PREFIX}buildpacks-stack-build-xsk:${{ env.XSK_VERSION }}
           cd buildpack/
           find *.toml -type f -exec sed -i ''s/#{XSKVersion}#/${{ env.XSK_VERSION }}/g;s/#{DOCKER_IMAGE_PREFIX}#/${{ env.DOCKER_IMAGE_PREFIX }}/g'' {} \;
-          pack buildpack package ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-xsk --config ./package.toml
-          docker tag ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-xsk ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-xsk:${{ env.XSK_VERSION }}
-          docker push ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-xsk:${{ env.XSK_VERSION }}
-          pack builder create ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-builder-xsk --config ./builder.toml
-          docker tag ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-builder-xsk ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-builder-xsk:${{ env.XSK_VERSION }}
-          docker push ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-builder-xsk:${{ env.XSK_VERSION }}
+          pack buildpack package ${DOCKER_IMAGE_PREFIX}buildpacks-xsk --config ./package.toml
+          docker tag ${DOCKER_IMAGE_PREFIX}buildpacks-xsk ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-xsk:${{ env.XSK_VERSION }}
+          docker push ${DOCKER_IMAGE_PREFIX}buildpacks-xsk:${{ env.XSK_VERSION }}
+          pack builder create ${DOCKER_IMAGE_PREFIX}buildpacks-builder-xsk --config ./builder.toml
+          docker tag ${DOCKER_IMAGE_PREFIX}buildpacks-builder-xsk ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-builder-xsk:${{ env.XSK_VERSION }}
+          docker push ${DOCKER_IMAGE_PREFIX}buildpacks-builder-xsk:${{ env.XSK_VERSION }}
           cd ../../../../
       - name: XSK Kyma Buildpack
         run: |
           cd releng/buildpacks/xsk-kyma/
-          docker build --load --build-arg DOCKER_IMAGE_PREFIX=${DOCKER_IMAGE_PREFIX} --build-arg XSK_VERSION=${{ env.XSK_VERSION }} -t ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-base-xsk-kyma . --target base
-          docker tag ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-base-xsk-kyma ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-base-xsk-kyma:${{ env.XSK_VERSION }}
-          docker push ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-base-xsk-kyma:${{ env.XSK_VERSION }}
-          docker build --load --build-arg DOCKER_IMAGE_PREFIX=${DOCKER_IMAGE_PREFIX} --build-arg XSK_VERSION=${{ env.XSK_VERSION }} -t ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-run-xsk-kyma . --target run
-          docker tag ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-run-xsk-kyma ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-run-xsk-kyma:${{ env.XSK_VERSION }}
-          docker push ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-run-xsk-kyma:${{ env.XSK_VERSION }}
-          docker build --load --build-arg DOCKER_IMAGE_PREFIX=${DOCKER_IMAGE_PREFIX} --build-arg XSK_VERSION=${{ env.XSK_VERSION }} -t ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-build-xsk-kyma . --target build
-          docker tag ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-build-xsk-kyma ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-build-xsk-kyma:${{ env.XSK_VERSION }}
-          docker push ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-build-xsk-kyma:${{ env.XSK_VERSION }}
+          docker build --load --build-arg DOCKER_IMAGE_PREFIX=${DOCKER_IMAGE_PREFIX} --build-arg XSK_VERSION=${{ env.XSK_VERSION }} -t ${DOCKER_IMAGE_PREFIX}buildpacks-stack-base-xsk-kyma . --target base
+          docker tag ${DOCKER_IMAGE_PREFIX}buildpacks-stack-base-xsk-kyma ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-base-xsk-kyma:${{ env.XSK_VERSION }}
+          docker push ${DOCKER_IMAGE_PREFIX}buildpacks-stack-base-xsk-kyma:${{ env.XSK_VERSION }}
+          docker build --load --build-arg DOCKER_IMAGE_PREFIX=${DOCKER_IMAGE_PREFIX} --build-arg XSK_VERSION=${{ env.XSK_VERSION }} -t ${DOCKER_IMAGE_PREFIX}buildpacks-stack-run-xsk-kyma . --target run
+          docker tag ${DOCKER_IMAGE_PREFIX}buildpacks-stack-run-xsk-kyma ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-run-xsk-kyma:${{ env.XSK_VERSION }}
+          docker push ${DOCKER_IMAGE_PREFIX}buildpacks-stack-run-xsk-kyma:${{ env.XSK_VERSION }}
+          docker build --load --build-arg DOCKER_IMAGE_PREFIX=${DOCKER_IMAGE_PREFIX} --build-arg XSK_VERSION=${{ env.XSK_VERSION }} -t ${DOCKER_IMAGE_PREFIX}buildpacks-stack-build-xsk-kyma . --target build
+          docker tag ${DOCKER_IMAGE_PREFIX}buildpacks-stack-build-xsk-kyma ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-build-xsk-kyma:${{ env.XSK_VERSION }}
+          docker push ${DOCKER_IMAGE_PREFIX}buildpacks-stack-build-xsk-kyma:${{ env.XSK_VERSION }}
           cd buildpack/
           find *.toml -type f -exec sed -i ''s/#{XSKVersion}#/${{ env.XSK_VERSION }}/g;s/#{DOCKER_IMAGE_PREFIX}#/${{ env.DOCKER_IMAGE_PREFIX }}/g'' {} \;
-          pack buildpack package ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-xsk-kyma --config ./package.toml
-          docker tag ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-xsk-kyma ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-xsk-kyma:${{ env.XSK_VERSION }}
-          docker push ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-xsk-kyma:${{ env.XSK_VERSION }}
-          pack builder create ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-builder-xsk-kyma --config ./builder.toml
-          docker tag ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-builder-xsk-kyma ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-builder-xsk-kyma:${{ env.XSK_VERSION }}
-          docker push ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-builder-xsk-kyma:${{ env.XSK_VERSION }}
+          pack buildpack package ${DOCKER_IMAGE_PREFIX}buildpacks-xsk-kyma --config ./package.toml
+          docker tag ${DOCKER_IMAGE_PREFIX}buildpacks-xsk-kyma ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-xsk-kyma:${{ env.XSK_VERSION }}
+          docker push ${DOCKER_IMAGE_PREFIX}buildpacks-xsk-kyma:${{ env.XSK_VERSION }}
+          pack builder create ${DOCKER_IMAGE_PREFIX}buildpacks-builder-xsk-kyma --config ./builder.toml
+          docker tag ${DOCKER_IMAGE_PREFIX}buildpacks-builder-xsk-kyma ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-builder-xsk-kyma:${{ env.XSK_VERSION }}
+          docker push ${DOCKER_IMAGE_PREFIX}buildpacks-builder-xsk-kyma:${{ env.XSK_VERSION }}
           cd ../../../../
       - name: XSK Kyma Runtime Buildpack
         run: |
           cd releng/buildpacks/xsk-kyma/
-          docker build --load -t ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-base-xsk-kyma . --target base
-          docker push ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-base-xsk-kyma
-          docker build --load -t ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-run-xsk-kyma . --target run
-          docker push ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-run-xsk-kyma
-          docker build --load -t ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-build-xsk-kyma . --target build
-          docker push ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-build-xsk-kyma
+          docker build --load -t ${DOCKER_IMAGE_PREFIX}buildpacks-stack-base-xsk-kyma . --target base
+          docker push ${DOCKER_IMAGE_PREFIX}buildpacks-stack-base-xsk-kyma
+          docker build --load -t ${DOCKER_IMAGE_PREFIX}buildpacks-stack-run-xsk-kyma . --target run
+          docker push ${DOCKER_IMAGE_PREFIX}buildpacks-stack-run-xsk-kyma
+          docker build --load -t ${DOCKER_IMAGE_PREFIX}buildpacks-stack-build-xsk-kyma . --target build
+          docker push ${DOCKER_IMAGE_PREFIX}buildpacks-stack-build-xsk-kyma
           cd buildpack/
           find *.toml -type f -exec sed -i ''s/#{XSKVersion}#/latest/g'' {} \;
-          pack buildpack package ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-xsk-kyma --config ./package.toml
-          docker push ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-xsk-kyma
-          pack builder create ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-builder-xsk-kyma --config ./builder.toml
-          docker push ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-builder-xsk-kyma
+          pack buildpack package ${DOCKER_IMAGE_PREFIX}buildpacks-xsk-kyma --config ./package.toml
+          docker push ${DOCKER_IMAGE_PREFIX}buildpacks-xsk-kyma
+          pack builder create ${DOCKER_IMAGE_PREFIX}buildpacks-builder-xsk-kyma --config ./builder.toml
+          docker push ${DOCKER_IMAGE_PREFIX}buildpacks-builder-xsk-kyma
           cd ../../../../
       - name: XSK Cloud Foundry Buildpack
         run: |
           cd releng/buildpacks/xsk-cf/
-          docker build --load --build-arg DOCKER_IMAGE_PREFIX=${DOCKER_IMAGE_PREFIX} --build-arg XSK_VERSION=${{ env.XSK_VERSION }} -t ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-base-xsk-cf . --target base
-          docker tag ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-base-xsk-cf ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-base-xsk-cf:${{ env.XSK_VERSION }}
-          docker push ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-base-xsk-cf:${{ env.XSK_VERSION }}
-          docker build --load --build-arg DOCKER_IMAGE_PREFIX=${DOCKER_IMAGE_PREFIX} --build-arg XSK_VERSION=${{ env.XSK_VERSION }} -t ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-run-xsk-cf . --target run
-          docker tag ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-run-xsk-cf ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-run-xsk-cf:${{ env.XSK_VERSION }}
-          docker push ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-run-xsk-cf:${{ env.XSK_VERSION }}
-          docker build --load --build-arg DOCKER_IMAGE_PREFIX=${DOCKER_IMAGE_PREFIX} --build-arg XSK_VERSION=${{ env.XSK_VERSION }} -t ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-build-xsk-cf . --target build
-          docker tag ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-build-xsk-cf ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-build-xsk-cf:${{ env.XSK_VERSION }}
-          docker push ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-build-xsk-cf:${{ env.XSK_VERSION }}
+          docker build --load --build-arg DOCKER_IMAGE_PREFIX=${DOCKER_IMAGE_PREFIX} --build-arg XSK_VERSION=${{ env.XSK_VERSION }} -t ${DOCKER_IMAGE_PREFIX}buildpacks-stack-base-xsk-cf . --target base
+          docker tag ${DOCKER_IMAGE_PREFIX}buildpacks-stack-base-xsk-cf ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-base-xsk-cf:${{ env.XSK_VERSION }}
+          docker push ${DOCKER_IMAGE_PREFIX}buildpacks-stack-base-xsk-cf:${{ env.XSK_VERSION }}
+          docker build --load --build-arg DOCKER_IMAGE_PREFIX=${DOCKER_IMAGE_PREFIX} --build-arg XSK_VERSION=${{ env.XSK_VERSION }} -t ${DOCKER_IMAGE_PREFIX}buildpacks-stack-run-xsk-cf . --target run
+          docker tag ${DOCKER_IMAGE_PREFIX}buildpacks-stack-run-xsk-cf ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-run-xsk-cf:${{ env.XSK_VERSION }}
+          docker push ${DOCKER_IMAGE_PREFIX}buildpacks-stack-run-xsk-cf:${{ env.XSK_VERSION }}
+          docker build --load --build-arg DOCKER_IMAGE_PREFIX=${DOCKER_IMAGE_PREFIX} --build-arg XSK_VERSION=${{ env.XSK_VERSION }} -t ${DOCKER_IMAGE_PREFIX}buildpacks-stack-build-xsk-cf . --target build
+          docker tag ${DOCKER_IMAGE_PREFIX}buildpacks-stack-build-xsk-cf ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-build-xsk-cf:${{ env.XSK_VERSION }}
+          docker push ${DOCKER_IMAGE_PREFIX}buildpacks-stack-build-xsk-cf:${{ env.XSK_VERSION }}
           cd buildpack/
           find *.toml -type f -exec sed -i ''s/#{XSKVersion}#/${{ env.XSK_VERSION }}/g;s/#{DOCKER_IMAGE_PREFIX}#/${{ env.DOCKER_IMAGE_PREFIX }}/g'' {} \;
-          pack buildpack package ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-xsk-cf --config ./package.toml
-          docker tag ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-xsk-cf ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-xsk-cf:${{ env.XSK_VERSION }}
-          docker push ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-xsk-cf:${{ env.XSK_VERSION }}
-          pack builder create ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-builder-xsk-cf --config ./builder.toml
-          docker tag ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-builder-xsk-cf ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-builder-xsk-cf:${{ env.XSK_VERSION }}
-          docker push ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-builder-xsk-cf:${{ env.XSK_VERSION }}
+          pack buildpack package ${DOCKER_IMAGE_PREFIX}buildpacks-xsk-cf --config ./package.toml
+          docker tag ${DOCKER_IMAGE_PREFIX}buildpacks-xsk-cf ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-xsk-cf:${{ env.XSK_VERSION }}
+          docker push ${DOCKER_IMAGE_PREFIX}buildpacks-xsk-cf:${{ env.XSK_VERSION }}
+          pack builder create ${DOCKER_IMAGE_PREFIX}buildpacks-builder-xsk-cf --config ./builder.toml
+          docker tag ${DOCKER_IMAGE_PREFIX}buildpacks-builder-xsk-cf ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-builder-xsk-cf:${{ env.XSK_VERSION }}
+          docker push ${DOCKER_IMAGE_PREFIX}buildpacks-builder-xsk-cf:${{ env.XSK_VERSION }}
           cd ../../../../
 
       #----------------Publish GitHub Release------------------#
@@ -208,9 +212,9 @@ jobs:
             ## XSK - ${{ env.XSK_VERSION }}
 
             #### Docker images:
-              - [${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}xsk](https://hub.docker.com/r/${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}xsk/tags?page=1&ordering=last_updated) - XSK Server.
-              - [${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}xsk-cf](https://hub.docker.com/r/${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}xsk-cf/tags?page=1&ordering=last_updated) - XSK Cloud Foundry.
-              - [${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}xsk-kyma](https://hub.docker.com/r/${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}xsk-kyma/tags?page=1&ordering=last_updated) - XSK Kyma.
+              - [${DOCKER_IMAGE_PREFIX}xsk](https://hub.docker.com/r/${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}xsk/tags?page=1&ordering=last_updated) - XSK Server.
+              - [${DOCKER_IMAGE_PREFIX}xsk-cf](https://hub.docker.com/r/${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}xsk-cf/tags?page=1&ordering=last_updated) - XSK Cloud Foundry.
+              - [${DOCKER_IMAGE_PREFIX}xsk-kyma](https://hub.docker.com/r/${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}xsk-kyma/tags?page=1&ordering=last_updated) - XSK Kyma.
 
             #### Available for download `*.war` packages:
               - [server](https://github.com/sap/xsk/releases/download/v${{ env.XSK_VERSION }}/server.zip) - XSK Server.
@@ -255,13 +259,13 @@ jobs:
             #### Pack
 
             Available Buildpack Builders:
-            - [${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-builder-xsk:${{ env.XSK_VERSION }}](https://hub.docker.com/r/${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-builder-xsk) - builder for local deployments.
-            - [${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-builder-xsk-kyma:${{ env.XSK_VERSION }}](https://hub.docker.com/r/${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-builder-xsk-kyma) - builder for Kyma ready deployments.
-            - [${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-builder-xsk-cf:${{ env.XSK_VERSION }}](https://hub.docker.com/r/${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-builder-xsk-cf) - builder for Cloud Foundry ready deployments
+            - [${DOCKER_IMAGE_PREFIX}buildpacks-builder-xsk:${{ env.XSK_VERSION }}](https://hub.docker.com/r/${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-builder-xsk) - builder for local deployments.
+            - [${DOCKER_IMAGE_PREFIX}buildpacks-builder-xsk-kyma:${{ env.XSK_VERSION }}](https://hub.docker.com/r/${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-builder-xsk-kyma) - builder for Kyma ready deployments.
+            - [${DOCKER_IMAGE_PREFIX}buildpacks-builder-xsk-cf:${{ env.XSK_VERSION }}](https://hub.docker.com/r/${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-builder-xsk-cf) - builder for Cloud Foundry ready deployments
 
             Building Docker Image with **pack**:
             ```
-            pack build --builder ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-builder-xsk:${{ env.XSK_VERSION }} <my-org>/<my-repository>
+            pack build --builder ${DOCKER_IMAGE_PREFIX}buildpacks-builder-xsk:${{ env.XSK_VERSION }} <my-org>/<my-repository>
             ```
             > _**Note:** The command will package all sub-folders (`project1`, `project2`, etc.) into a XSK docker image with the application sources._
 
@@ -295,7 +299,7 @@ jobs:
               name: xsk-store
             spec:
               sources:
-              - image: ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-xsk:${{ env.XSK_VERSION }}
+              - image: ${DOCKER_IMAGE_PREFIX}buildpacks-xsk:${{ env.XSK_VERSION }}
             ---
             apiVersion: kpack.io/v1alpha1
             kind: ClusterStack
@@ -304,9 +308,9 @@ jobs:
             spec:
               id: com.sap.kneo.xsk
               buildImage:
-                image: ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-build-xsk-kyma:${{ env.XSK_VERSION }}
+                image: ${DOCKER_IMAGE_PREFIX}buildpacks-stack-build-xsk-kyma:${{ env.XSK_VERSION }}
               runImage:
-                image: ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-run-xsk-kyma:${{ env.XSK_VERSION }}
+                image: ${DOCKER_IMAGE_PREFIX}buildpacks-stack-run-xsk-kyma:${{ env.XSK_VERSION }}
             ---
             apiVersion: kpack.io/v1alpha1
             kind: Builder
@@ -323,7 +327,7 @@ jobs:
                 kind: ClusterStore
               order:
               - group:
-                - id: ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-xsk
+                - id: ${DOCKER_IMAGE_PREFIX}buildpacks-xsk
             ```
 
             > _**Note**: Replace `<your-service-account>` with your ServiceAccount (sample could be found [here](https://github.com/SAP/xsk/blob/main/releng/buildpacks/xsk/kpack/service-account.yaml))._
@@ -765,7 +769,7 @@ jobs:
           mkdir $HOME/.kube
           echo "${{ secrets.KUBE_CONFIG }}" >> $HOME/.kube/config
       - name: Update XSK Instance
-        run: kubectl set image deployment/xsk-trial xsk=${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}xsk-kyma:${{ env.XSK_VERSION }} -n xsk-trial
+        run: kubectl set image deployment/xsk-trial xsk=${DOCKER_IMAGE_PREFIX}xsk-kyma:${{ env.XSK_VERSION }} -n xsk-trial
 
       #------------------Update XSK Instance-------------------#
 
