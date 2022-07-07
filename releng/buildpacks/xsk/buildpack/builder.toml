@@ -9,5 +9,5 @@ uri = "."
 
 [stack]
 id = "com.sap.kneo.xsk"
-build-image = "#{DOCKER_IMAGE_PREFIX}/buildpacks-stack-build-xsk:#{XSKVersion}#"
-run-image = "#{DOCKER_IMAGE_PREFIX}/buildpacks-stack-run-xsk:#{XSKVersion}#"
+build-image = "#{DOCKER_IMAGE_PREFIX}buildpacks-stack-build-xsk:#{XSKVersion}#"
+run-image = "#{DOCKER_IMAGE_PREFIX}buildpacks-stack-run-xsk:#{XSKVersion}#"
