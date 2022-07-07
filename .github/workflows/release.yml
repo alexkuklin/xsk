@@ -12,8 +12,7 @@ jobs:
     steps:
       - name: set variables
         run: |
-          DOCKER_IMAGE_PREFIX=${DOCKER_IMAGE_PREFIX_SECRET:-dirigiblelabs/}
-          echo DOCKER_IMAGE_PREFIX=$DOCKER_IMAGE_PREFIX >> $GITHUB_ENV
+          echo DOCKER_IMAGE_PREFIX=${DOCKER_IMAGE_PREFIX_SECRET:-dirigiblelabs/} >> $GITHUB_ENV
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
