@@ -8,7 +8,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      DOCKER_IMAGE_PREFIX: ${{ secrets.DOCKER_IMAGE_PREFIX }}
+      DOCKER_IMAGE_PREFIX: ${{ secrets.DOCKER_IMAGE_PREFIX == '' && secrets.DOCKER_IMAGE_PREFIX || 'dirigiblelabs/' }}
     steps:
       - uses: actions/checkout@v2
         with:
@@ -88,7 +88,7 @@ jobs:
           docker tag ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-build-xsk ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-build-xsk:${{ env.XSK_VERSION }}
           docker push ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-build-xsk:${{ env.XSK_VERSION }}
           cd buildpack/
-          find *.toml -type f -exec sed -i ''s/#{XSKVersion}#/${{ env.XSK_VERSION }}/g'' {} \;
+          find *.toml -type f -exec sed -i ''s/#{XSKVersion}#/${{ env.XSK_VERSION }}/g;s/#{DOCKER_IMAGE_PREFIX}#/${{ env.DOCKER_IMAGE_PREFIX }}/g'' {} \;
           pack buildpack package ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-xsk --config ./package.toml
           docker tag ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-xsk ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-xsk:${{ env.XSK_VERSION }}
           docker push ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-xsk:${{ env.XSK_VERSION }}
@@ -109,7 +109,7 @@ jobs:
           docker tag ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-build-xsk-kyma ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-build-xsk-kyma:${{ env.XSK_VERSION }}
           docker push ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-build-xsk-kyma:${{ env.XSK_VERSION }}
           cd buildpack/
-          find *.toml -type f -exec sed -i ''s/#{XSKVersion}#/${{ env.XSK_VERSION }}/g'' {} \;
+          find *.toml -type f -exec sed -i ''s/#{XSKVersion}#/${{ env.XSK_VERSION }}/g;s/#{DOCKER_IMAGE_PREFIX}#/${{ env.DOCKER_IMAGE_PREFIX }}/g'' {} \;
           pack buildpack package ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-xsk-kyma --config ./package.toml
           docker tag ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-xsk-kyma ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-xsk-kyma:${{ env.XSK_VERSION }}
           docker push ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-xsk-kyma:${{ env.XSK_VERSION }}
@@ -146,7 +146,7 @@ jobs:
           docker tag ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-build-xsk-cf ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-build-xsk-cf:${{ env.XSK_VERSION }}
           docker push ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-stack-build-xsk-cf:${{ env.XSK_VERSION }}
           cd buildpack/
-          find *.toml -type f -exec sed -i ''s/#{XSKVersion}#/${{ env.XSK_VERSION }}/g'' {} \;
+          find *.toml -type f -exec sed -i ''s/#{XSKVersion}#/${{ env.XSK_VERSION }}/g;s/#{DOCKER_IMAGE_PREFIX}#/${{ env.DOCKER_IMAGE_PREFIX }}/g'' {} \;
           pack buildpack package ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-xsk-cf --config ./package.toml
           docker tag ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-xsk-cf ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-xsk-cf:${{ env.XSK_VERSION }}
           docker push ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-xsk-cf:${{ env.XSK_VERSION }}
@@ -712,10 +712,10 @@ jobs:
       - name: Helm Charts Release - Set Chart Version - XSK
         run: |
           cd charts-temp/helm-charts/
-          find xsk/*.yaml -type f -exec sed -i ''s/#{XSKVersion}#/${{ env.XSK_VERSION }}/g'' {} \;
-          find xsk-kpack/*.yaml -type f -exec sed -i ''s/#{XSKVersion}#/${{ env.XSK_VERSION }}/g'' {} \;
-          find xsk-kpack/templates/*.yaml -type f -exec sed -i ''s/#{XSKVersion}#/${{ env.XSK_VERSION }}/g'' {} \;
-          find xsk-landscape/*.yaml -type f -exec sed -i ''s/#{XSKVersion}#/${{ env.XSK_VERSION }}/g'' {} \;
+          find xsk/*.yaml -type f -exec sed -i ''s/#{XSKVersion}#/${{ env.XSK_VERSION }}/g;s/#{DOCKER_IMAGE_PREFIX}#/${{ env.DOCKER_IMAGE_PREFIX }}/g'' {} \;
+          find xsk-kpack/*.yaml -type f -exec sed -i ''s/#{XSKVersion}#/${{ env.XSK_VERSION }}/g;s/#{DOCKER_IMAGE_PREFIX}#/${{ env.DOCKER_IMAGE_PREFIX }}/g'' {} \;
+          find xsk-kpack/templates/*.yaml -type f -exec sed -i ''s/#{XSKVersion}#/${{ env.XSK_VERSION }}/g;s/#{DOCKER_IMAGE_PREFIX}#/${{ env.DOCKER_IMAGE_PREFIX }}/g'' {} \;
+          find xsk-landscape/*.yaml -type f -exec sed -i ''s/#{XSKVersion}#/${{ env.XSK_VERSION }}/g;s/#{DOCKER_IMAGE_PREFIX}#/${{ env.DOCKER_IMAGE_PREFIX }}/g'' {} \;
       - name: Helm Charts Release
         run: |
           cp charts/* charts-temp/helm-charts/
