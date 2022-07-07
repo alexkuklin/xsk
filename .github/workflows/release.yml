@@ -93,7 +93,7 @@ jobs:
           docker push ${DOCKER_IMAGE_PREFIX}buildpacks-stack-build-xsk:${{ env.XSK_VERSION }}
           cd buildpack/
           find *.toml -type f -exec sed -i ''s/#{XSKVersion}#/${{ env.XSK_VERSION }}/g'' {} \;
-          find *.toml -type f -exec sed -i ''s/#{DOCKER_IMAGE_PREFIX}/${{ env.DOCKER_IMAGE_PREFIX }}/g'' {} \;
+          find *.toml -type f -exec sed -i ''s+#{DOCKER_IMAGE_PREFIX}+${{ env.DOCKER_IMAGE_PREFIX }}+g'' {} \;
           pack buildpack package ${DOCKER_IMAGE_PREFIX}buildpacks-xsk --config ./package.toml
           docker tag ${DOCKER_IMAGE_PREFIX}buildpacks-xsk ${DOCKER_IMAGE_PREFIX:-dirigiblelabs/}buildpacks-xsk:${{ env.XSK_VERSION }}
           docker push ${DOCKER_IMAGE_PREFIX}buildpacks-xsk:${{ env.XSK_VERSION }}
